@@ -1,0 +1,28 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+title Diagrama de containers de um sistema de gerenciamento de contratos de serviço
+
+Container(eureka, "Load Balancer", "Spring Eureka Server", "instancia responsavel por tornar trasnparente a distribuição de carga")
+Container(alias1, "Instancia Efêmera - Backend API [READ]", "Spring Eureka Client", "instancia responsavel por realizar operação de tratamento de dados da plataforma")
+Container(alias2, "Instancia Efêmera - Backend API [READ]", "Spring Eureka Client", "instancia responsavel por realizar operação de tratamento de dados da plataforma")
+Container(alias3, "Instancia Efêmera - Backend API [WRITE]", "Spring Eureka Client", "instancia responsavel por realizar operação de gravação/alteração de dados da plataforma")
+ContainerQueue(mensageria,"Serviço de mensageria",RabbitMQ/Kafka,"Serviço utilizado para colocar em fila requisições que podem demorar tempo para serem executadas, garantindo-se que elas serão executadas.")
+ContainerDb(db, "Database", "Postgres", "Guarda todas as informacoes das entidades e dos relacionamentos contidos no sistema")
+
+Rel(eureka, alias1, "encaminhar solicitação")
+Rel(alias1, db, "solicitar dados")
+Rel(eureka, alias2, "encaminhar solicitação")
+Rel(alias2, db, "solicitar dados")
+Rel(eureka, alias2, "encaminhar solicitação")
+Rel(alias2, db, "solicitar dados")
+
+Rel(db, alias1, "prover dados")
+Rel(db, alias2, "prover dados")
+
+Rel(alias1, mensageria, "produzir uma requisição na fila")
+Rel(alias2, mensageria, "produzir uma requisição na fila")
+Rel(mensageria, alias3, "consumir uma requisição na fila")
+Rel(alias3, db, "alterar dados do banco")
+
+
+@enduml

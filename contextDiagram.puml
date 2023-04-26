@@ -1,0 +1,49 @@
+@startuml diagrama de contexto
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+title Diagrama de contexto de um sistema de gerenciamento de contratos de serviço
+footer Copyright bernard.carvalho@estudante.ifto.edu.br
+
+    'Person(author, "author")
+    'System(blog, "Acme Blog")
+
+    'Rel(author, blog, "Create Post")
+    'Rel(author, blog, "Update Post", "http")
+
+    'Person_Ext(reader, "reader")
+
+
+System(plataforma, "Plataforma")
+System_Ext(mensageria, "Aplicativo de mensagens")
+System_Ext(pagamento, "Sistema de pagamentos")
+
+Person(contratante, "Contratante")
+Person(prestador, "Prestador")
+
+Rel(contratante, plataforma,"Solicitar contrato")
+Rel(prestador, plataforma, "Precificar serviço")
+Rel(plataforma, mensageria, "Informar novo contrato")
+Rel(mensageria, prestador, "Notificar prestador")
+
+'Rel(prestador, plataforma, "Firmar contrato")
+'Rel(contratante, plataforma, "Cancelar contrato")
+
+Rel(contratante, plataforma, "Realizar cadastro")
+Rel(prestador, plataforma, "Realizar cadastro")
+
+Rel(prestador, plataforma, "Informar conclusão contratual")
+Rel(plataforma, mensageria, "Informar conclusão do contrato")
+Rel(mensageria, contratante, "Notificar contratante")
+
+Rel(contratante, plataforma, "Creditar valor em conta")
+Rel(plataforma, pagamento, "Creditar valor em conta")
+Rel(plataforma, pagamento, "Debitar valor em conta")
+
+Rel(pagamento, prestador, "Notificar")
+
+
+
+
+
+
+
+@enduml
